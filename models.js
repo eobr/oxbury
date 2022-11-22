@@ -6,3 +6,23 @@ exports.selectData = () => {
     return data;
   });
 };
+
+exports.selectFarms = async () => {
+  const data = await this.selectData();
+  return data.farm;
+};
+
+exports.selectFarmers = async () => {
+  const data = await this.selectData();
+  return data.farmer;
+};
+
+exports.selectProducts = async () => {
+  const data = await this.selectData();
+  return data.product;
+};
+
+exports.selectApplications = async () => {
+  const data = await this.selectData();
+  return data.application;
+};

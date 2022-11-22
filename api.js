@@ -1,4 +1,10 @@
-const { getData } = require("./controllers");
+const {
+  getData,
+  getApplications,
+  getFarms,
+  getFarmers,
+  getProducts,
+} = require("./controllers");
 const apiRouter = require("express").Router();
 
 apiRouter.get("/", (_, res) => {
@@ -6,5 +12,9 @@ apiRouter.get("/", (_, res) => {
 });
 
 apiRouter.get("/data", getData);
+apiRouter.get("/applications", getApplications);
+apiRouter.get("/farms", getFarms);
+apiRouter.get("/farmers", getFarmers);
+apiRouter.get("/products", getProducts);
 
 module.exports = apiRouter;
