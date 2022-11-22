@@ -1,0 +1,23 @@
+{
+  "name": "oxbury",
+  "version": "1.0.0",
+  "description": "This is a technical test to evaluate your integration and web development knowledge. We will accept submissions in any of NodeJS (TypeScript or JavaScript), PHP, Java and Python.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "npx node listen.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eobr/oxbury.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eobr/oxbury/issues"
+  },
+  "homepage": "https://github.com/eobr/oxbury#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
