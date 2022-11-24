@@ -110,12 +110,57 @@ describe("POST /api/farmers", () => {
 
 describe("DELETE /api/farmer/:id", () => {
   it("deletes a farmer from data.json", async () => {
-    await request.delete("/api/farmers/1945189").expect(200);
+    const farmerId = 1945189;
+    await request.delete(`/api/farmers/${farmerId}`).expect(200);
     const farmers = await selectFarmers();
-    const indexOfDeletedFarmer = farmers.findIndex((x) => x.id === 1945189);
+    const indexOfDeletedFarmer = farmers.findIndex((x) => x.id === farmerId);
     expect(indexOfDeletedFarmer).toEqual(-1);
   });
   it("returns 404 if farmer id does not exist", async () => {
     await request.delete("/api/farmers/999999").expect(404);
+  });
+});
+
+describe("PATCH /api/farmers", () => {
+  it("adds new farmer to data.json", async () => {
+    const farmerId = 1921858;
+    const reqBody = {
+      id: farmerId,
+      name: "test",
+      age: 99,
+      phone_number: "07777777777",
+      farm_id: 99999,
+    };
+    const res = await request
+      .patch(`/api/farmers/${farmerId}`)
+      .send(reqBody)
+      .expect(200);
+    const addedFarmer = res.body;
+    const farmers = await selectFarmers();
+    const patchedFarmer = farmers.find((x) => x.id === farmerId);
+    console.log(patchedFarmer);
+    expect(patchedFarmer).toEqual(reqBody);
+  });
+
+  it("returns 400 if request body has been invalidated by schema", async () => {
+    const farmerId = 1921858;
+    await request
+      .patch(`/api/farmers/${farmerId}`)
+      .send({
+        test: 999,
+        test2: "test",
+      })
+      .expect(400);
+  });
+  it("returns 404 if farmer id does not exist", async () => {
+    const farmerId = 99999;
+    const reqBody = {
+      id: farmerId,
+      name: "test",
+      age: 99,
+      phone_number: "07777777777",
+      farm_id: 99999,
+    };
+    await request.patch(`/api/farmers/${farmerId}`).send(reqBody).expect(404);
   });
 });

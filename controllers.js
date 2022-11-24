@@ -7,6 +7,7 @@ const {
   selectProducts,
   addFarmers,
   removeFarmers,
+  editFarmers,
 } = require("./models");
 const { farmerSchema } = require("./validation/farmer.schema");
 
@@ -79,7 +80,26 @@ exports.deleteFarmers = async (req, res, next) => {
   try {
     const { farmerId } = req.params;
     const data = await removeFarmers(Number(farmerId));
-    
+
+    if (data) res.status(200).send(data);
+    else res.status(404).send(`Farmer ${farmerId} not found`);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// PATCHs
+
+exports.patchFarmers = async (req, res, next) => {
+  try {
+    const valid = await farmerSchema.isValid(req.body);
+    if (!valid) {
+      res.status(400).send("Request body is invalid");
+      return;
+    }
+    const { farmerId } = req.params;
+    const data = await editFarmers(req.body, Number(farmerId));
+    console.log(data);
     if (data) res.status(200).send(data);
     else res.status(404).send(`Farmer ${farmerId} not found`);
   } catch (err) {

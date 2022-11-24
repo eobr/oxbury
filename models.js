@@ -46,18 +46,36 @@ exports.addFarmers = async (newFarmer) => {
 // DELETEs
 
 exports.removeFarmers = async (farmerId) => {
-    const data = await this.selectData();
-    const dataCopy = { ...data };
-    const farmerPosition = dataCopy.farmer.findIndex(x => x.id === farmerId);
+  const data = await this.selectData();
+  const dataCopy = { ...data };
+  const farmerIndex = dataCopy.farmer.findIndex((x) => x.id === farmerId);
 
-    if (farmerPosition === -1) return false;
+  if (farmerIndex === -1) return false;
 
-    dataCopy.farmer.splice(farmerPosition, 1);
+  dataCopy.farmer.splice(farmerIndex, 1);
 
-    await fsPromise.writeFile(
-      "./data/data.json",
-      JSON.stringify(dataCopy, null, 4)
-    );
-    return `Farmer ${farmerId} successfully deleted`;
-  };
+  await fsPromise.writeFile(
+    "./data/data.json",
+    JSON.stringify(dataCopy, null, 4)
+  );
+  return `Farmer ${farmerId} successfully deleted`;
+};
+
+// PATCHs
+
+exports.editFarmers = async (updatedFarmer, farmerId) => {
+  const data = await this.selectData();
+  const dataCopy = { ...data };
+  const farmerIndex = dataCopy.farmer.findIndex((x) => x.id === farmerId);
+  console.log(farmerIndex, farmerId);
+  if (farmerIndex === -1) return false;
+
+  dataCopy.farmer.splice(farmerIndex, 1, updatedFarmer);
+
+  await fsPromise.writeFile(
+    "./data/data.json",
+    JSON.stringify(dataCopy, null, 4)
+  );
+  return `Farmer ${farmerId} successfully patched`;
+};
 
