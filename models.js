@@ -26,3 +26,18 @@ exports.selectApplications = async () => {
   const data = await this.selectData();
   return data.application;
 };
+
+// POSTs
+
+exports.addFarmers = async (newFarmer) => {
+  const data = await this.selectData();
+  const dataCopy = { ...data };
+  dataCopy.farmer.push(newFarmer);
+
+  await fsPromise.writeFile(
+    "./data/data.json",
+    JSON.stringify(dataCopy, null, 4)
+  );
+  return newFarmer;
+};
+

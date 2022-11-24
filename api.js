@@ -4,6 +4,7 @@ const {
   getFarms,
   getFarmers,
   getProducts,
+  postFarmers,
 } = require("./controllers");
 const apiRouter = require("express").Router();
 
@@ -16,5 +17,7 @@ apiRouter.get("/applications", getApplications);
 apiRouter.get("/farms", getFarms);
 apiRouter.get("/farmers", getFarmers);
 apiRouter.get("/products", getProducts);
+
+apiRouter.post("/farmers", postFarmers);
 
 module.exports = apiRouter;
