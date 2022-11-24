@@ -43,3 +43,21 @@ exports.addFarmers = async (newFarmer) => {
   return newFarmer;
 };
 
+// DELETEs
+
+exports.removeFarmers = async (farmerId) => {
+    const data = await this.selectData();
+    const dataCopy = { ...data };
+    const farmerPosition = dataCopy.farmer.findIndex(x => x.id === farmerId);
+
+    if (farmerPosition === -1) return false;
+
+    dataCopy.farmer.splice(farmerPosition, 1);
+
+    await fsPromise.writeFile(
+      "./data/data.json",
+      JSON.stringify(dataCopy, null, 4)
+    );
+    return `Farmer ${farmerId} successfully deleted`;
+  };
+

@@ -5,6 +5,7 @@ const {
   getFarmers,
   getProducts,
   postFarmers,
+  deleteFarmers,
 } = require("./controllers");
 const apiRouter = require("express").Router();
 
@@ -19,5 +20,7 @@ apiRouter.get("/farmers", getFarmers);
 apiRouter.get("/products", getProducts);
 
 apiRouter.post("/farmers", postFarmers);
+
+apiRouter.delete("/farmers/:farmerId", deleteFarmers);
 
 module.exports = apiRouter;

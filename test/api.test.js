@@ -107,3 +107,15 @@ describe("POST /api/farmers", () => {
       .expect(400);
   });
 });
+
+describe("DELETE /api/farmer/:id", () => {
+  it("deletes a farmer from data.json", async () => {
+    await request.delete("/api/farmers/1945189").expect(200);
+    const farmers = await selectFarmers();
+    const indexOfDeletedFarmer = farmers.findIndex((x) => x.id === 1945189);
+    expect(indexOfDeletedFarmer).toEqual(-1);
+  });
+  it("returns 404 if farmer id does not exist", async () => {
+    await request.delete("/api/farmers/999999").expect(404);
+  });
+});
