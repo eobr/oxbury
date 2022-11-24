@@ -9,13 +9,16 @@ const {
   removeFarmers,
   editFarmers,
 } = require("./models");
-const { paginate } = require("./utils");
+const { paginate, isAuthorized } = require("./utils");
 const { farmerSchema } = require("./validation/farmer.schema");
 
 // GETs
 
 exports.getData = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const data = await selectData();
     res.status(200).send({ data });
   } catch (err) {
@@ -25,6 +28,9 @@ exports.getData = async (req, res, next) => {
 
 exports.getFarms = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const data = await selectFarms();
     const paginatedData = paginate(req.query.page, req.query.limit, data);
     res.status(200).send({ data: paginatedData });
@@ -35,6 +41,9 @@ exports.getFarms = async (req, res, next) => {
 
 exports.getFarmers = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const data = await selectFarmers();
     const paginatedData = paginate(req.query.page, req.query.limit, data);
     res.status(200).send({ data: paginatedData });
@@ -45,6 +54,9 @@ exports.getFarmers = async (req, res, next) => {
 
 exports.getApplications = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const data = await selectApplications(req.query);
     if (!data) {
       res.status(404).send("404: No data found");
@@ -59,6 +71,9 @@ exports.getApplications = async (req, res, next) => {
 
 exports.getProducts = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const data = await selectProducts();
     const paginatedData = paginate(req.query.page, req.query.limit, data);
     res.status(200).send({ data: paginatedData });
@@ -71,6 +86,9 @@ exports.getProducts = async (req, res, next) => {
 
 exports.postFarmers = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const valid = await farmerSchema.isValid(req.body);
     if (!valid) {
       res.status(400).send("Request body is invalid");
@@ -87,6 +105,9 @@ exports.postFarmers = async (req, res, next) => {
 
 exports.deleteFarmers = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const { farmerId } = req.params;
     const data = await removeFarmers(Number(farmerId));
 
@@ -101,6 +122,9 @@ exports.deleteFarmers = async (req, res, next) => {
 
 exports.patchFarmers = async (req, res, next) => {
   try {
+    if (!isAuthorized(req.headers.authorization)) {
+      res.status(401).send("401: Unauthorized");
+    }
     const valid = await farmerSchema.isValid(req.body);
     if (!valid) {
       res.status(400).send("Request body is invalid");

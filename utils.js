@@ -6,3 +6,8 @@ exports.paginate = (page, limit, data) => {
   const paginatedData = data.slice(startIdx, endIdx);
   return paginatedData;
 };
+
+exports.isAuthorized = (token) => {
+  if (token === "testToken") return true;
+  return false;
+};

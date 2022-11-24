@@ -16,7 +16,10 @@ test("/api", async () => {
 
 describe("GET /api/data", () => {
   it("returns data from data.json", async () => {
-    const res = await request.get("/api/data").expect(200);
+    const res = await request
+      .get("/api/data")
+      .set("Authorization", "testToken")
+      .expect(200);
     expect(res.body.data).toHaveProperty("application");
     expect(res.body.data).toHaveProperty("farmer");
     expect(res.body.data).toHaveProperty("farm");
@@ -25,7 +28,10 @@ describe("GET /api/data", () => {
 });
 describe("GET /api/farms", () => {
   it("returns data from data.json", async () => {
-    const res = await request.get("/api/farms").expect(200);
+    const res = await request
+      .get("/api/farms")
+      .set("Authorization", "testToken")
+      .expect(200);
     expect(res.body.data[0]).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
@@ -40,7 +46,10 @@ describe("GET /api/farms", () => {
 });
 describe("GET /api/farmers", () => {
   it("returns data from data.json", async () => {
-    const res = await request.get("/api/farmers").expect(200);
+    const res = await request
+      .get("/api/farmers")
+      .set("Authorization", "testToken")
+      .expect(200);
     expect(res.body.data[0]).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
@@ -54,7 +63,10 @@ describe("GET /api/farmers", () => {
 });
 describe("GET /api/products", () => {
   it("returns data from data.json", async () => {
-    const res = await request.get("/api/products").expect(200);
+    const res = await request
+      .get("/api/products")
+      .set("Authorization", "testToken")
+      .expect(200);
     expect(res.body.data[0]).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
@@ -66,7 +78,10 @@ describe("GET /api/products", () => {
 });
 describe("GET /api/applications", () => {
   it("returns data from data.json", async () => {
-    const res = await request.get("/api/applications").expect(200);
+    const res = await request
+      .get("/api/applications")
+      .set("Authorization", "testToken")
+      .expect(200);
     expect(res.body.data[0]).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
@@ -82,6 +97,7 @@ describe("GET /api/applications", () => {
     const farmer_id = 1215200;
     const res = await request
       .get(`/api/applications/?farmer_id=${farmer_id}`)
+      .set("Authorization", "testToken")
       .expect(200);
     expect(res.body.data.length).toBe(3);
     expect(res.body.data.every((x) => x.farmer_id === farmer_id)).toBe(true);
@@ -91,6 +107,7 @@ describe("GET /api/applications", () => {
     const type = "flexi_credit";
     const res = await request
       .get(`/api/applications/?farmer_id=${farmer_id}&type=${type}`)
+      .set("Authorization", "testToken")
       .expect(200);
     expect(res.body.data.length).toBe(2);
     expect(res.body.data.every((x) => x.farmer_id === farmer_id)).toBe(true);
@@ -100,6 +117,7 @@ describe("GET /api/applications", () => {
     const farmer_id = 99999999;
     const res = await request
       .get(`/api/applications/?farmer_id=${farmer_id}`)
+      .set("Authorization", "testToken")
       .expect(404);
   });
 });
@@ -114,6 +132,7 @@ describe("POST /api/farmers", () => {
         phone_number: "07777777777",
         farm_id: 99999,
       })
+      .set("Authorization", "testToken")
       .expect(201);
     const addedFarmer = res.body;
     const farmers = await selectFarmers();
@@ -128,6 +147,7 @@ describe("POST /api/farmers", () => {
         test: 999,
         test2: "test",
       })
+      .set("Authorization", "testToken")
       .expect(400);
   });
 });
@@ -135,13 +155,19 @@ describe("POST /api/farmers", () => {
 describe("DELETE /api/farmer/:id", () => {
   it("deletes a farmer from data.json", async () => {
     const farmerId = 1252257;
-    await request.delete(`/api/farmers/${farmerId}`).expect(200);
+    await request
+      .delete(`/api/farmers/${farmerId}`)
+      .set("Authorization", "testToken")
+      .expect(200);
     const farmers = await selectFarmers();
     const indexOfDeletedFarmer = farmers.findIndex((x) => x.id === farmerId);
     expect(indexOfDeletedFarmer).toEqual(-1);
   });
   it("returns 404 if farmer id does not exist", async () => {
-    await request.delete("/api/farmers/999999").expect(404);
+    await request
+      .delete("/api/farmers/999999")
+      .set("Authorization", "testToken")
+      .expect(404);
   });
 });
 
@@ -158,6 +184,7 @@ describe("PATCH /api/farmers", () => {
     const res = await request
       .patch(`/api/farmers/${farmerId}`)
       .send(reqBody)
+      .set("Authorization", "testToken")
       .expect(200);
     const addedFarmer = res.body;
     const farmers = await selectFarmers();
@@ -174,6 +201,7 @@ describe("PATCH /api/farmers", () => {
         test: 999,
         test2: "test",
       })
+      .set("Authorization", "testToken")
       .expect(400);
   });
   it("returns 404 if farmer id does not exist", async () => {
@@ -185,7 +213,11 @@ describe("PATCH /api/farmers", () => {
       phone_number: "07777777777",
       farm_id: 99999,
     };
-    await request.patch(`/api/farmers/${farmerId}`).send(reqBody).expect(404);
+    await request
+      .patch(`/api/farmers/${farmerId}`)
+      .send(reqBody)
+      .set("Authorization", "testToken")
+      .expect(404);
   });
 });
 describe("Pagination tests", () => {
@@ -197,7 +229,10 @@ describe("Pagination tests", () => {
       phone_number: "07700900345",
       farm_id: 1535538,
     };
-    const res = await request.get("/api/farmers").expect(200);
+    const res = await request
+      .get("/api/farmers")
+      .set("Authorization", "testToken")
+      .expect(200);
     expect(res.body.data.length).toEqual(30);
     expect(res.body.data[0]).toEqual(firstFarmer);
   });
@@ -213,8 +248,23 @@ describe("Pagination tests", () => {
     const limit = 1;
     const res = await request
       .get(`/api/farmers/?page=${page}&limit=${limit}`)
+      .set("Authorization", "testToken")
       .expect(200);
     expect(res.body.data.length).toEqual(1);
     expect(res.body.data[0]).toEqual(thirdFarmer);
+  });
+});
+describe("Auth Tests", () => {
+  it("Returns data when given correct Auth Header", async () => {
+    await request
+      .get("/api/farmers")
+      .set("Authorization", "testToken")
+      .expect(200);
+  });
+  it("Returns 401 when given incorrect Auth Header", async () => {
+    await request
+      .get("/api/farmers")
+      .set("Authorization", "wrongToken")
+      .expect(401);
   });
 });
