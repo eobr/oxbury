@@ -1,11 +1,12 @@
 const supertest = require("supertest");
 const { resetData } = require("../data/utils.js");
+const { selectFarmers } = require("../models.js");
 const server = require("../server");
 
 const request = supertest(server);
 
-afterAll(() => {
-  resetData();
+afterAll(async () => {
+  await resetData();
 });
 
 test("/api", async () => {
