@@ -1,10 +1,12 @@
 const fsPromise = require("fs/promises");
+const fs = require("fs");
 
-exports.selectData = () => {
-  return fsPromise.readFile("./data/data.json", "utf8").then((res) => {
-    const data = JSON.parse(res);
-    return data;
-  });
+// GETs
+
+exports.selectData = async () => {
+  const res = await fsPromise.readFile("./data/data.json", "utf8");
+  const data = await JSON.parse(res);
+  return data;
 };
 
 exports.selectFarms = async () => {
