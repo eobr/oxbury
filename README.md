@@ -1,32 +1,58 @@
-# Farm API
+# README - Oxbury Tech Test
 
-This is a technical test to evaluate your integration and web development knowledge. We will accept submissions in any of NodeJS (TypeScript or JavaScript), PHP, Java and Python.
+## Prerequisites
 
-Please avoid using a full web application framework such as NestJS or Laravel as they do a lot of the decision making for you and we want to see what decisions and choices you make. You are free however, to use smaller packages to speed up development process.
+- Node
+- npm
 
-## Task
+## Getting Started
 
-* Implement a simple RESTful API that:
-  * Makes available the data in [this file](/data.json)
-  * Provides ability to add/edit/delete data
-  * Provides ability to paginate response (default 30 items per page)
-  * Provides ability to query data sets on their field values and linked field values (e.g. `farmer_id` in applications)
+Before attempting anything, ensure you have run `npm i` in this directory to install all dependencies.
 
-### Extra / Bonus Points
+## Testing
 
-* If you have extra time feel free to add extra features you think would be appropriate, e.g:
-  * Authentication
-  * Rate Limiting
+All tests are in the `test` directory. We use `jest` and `supertest` to test our server. Run `npm t` to execute tests.
 
-### Note
+## Running The Server
 
-* Must demonstrate good development practices.
-* We will be looking at your git history to understand your process, so please make it clear with appropriate commit messages.
+Run `npm start` to run the server. It is configured to run on localhost:9090 by default.
 
-## Info
+## Endpoints
 
-The above task should be clear and manageable to be completed within ~2 hours timeframe for the experienced developer. If you have any questions feel free to ask as soon as possible as this is a time-critical task.
- 
-We aren't providing a skeleton project for this.
+(a) = protected endpoint - add request header "Authorization": "testToken" to use
 
-We will be evaluating this as evidence of your ability to develop quality code, so please keep that in mind and consider test coverage and good principles. **Better to do a smaller deliverable of excellent quality than to provide more features but in a slap-dash fashion.**
+(v) = request body validation via schema
+
+(pg) = results paginated and endpoint takes additional queries "page" and "limnit"
+
+- `/api`
+  - GET - Returns a 200 and an `ok` message when the server is online
+
+- `/api/data`
+  - GET (a) - Returns a 200 and a JSON object containing the whole DB
+
+- `/api/farmers` 
+  - GET (a, pg) - Returns a 200 and a list of all farmers
+  - POST (a, v) - Returns a 201 and JSON object of the added farmer
+  - PATCH (a, v) - Returns a 200 and a confirmation message
+  - DELETE (a) - Returns a 200 and a confirmation message
+
+- `/api/applications` 
+  - GET (a, pg) - Returns a 200 and a list of all applications
+    - Able to compound query: 
+      id, type, amount_requested, status, product_id, farmer_id
+
+- `/api/farms` 
+  - GET (a, pg) - Returns a 200 and a list of all farms
+
+- `/api/products` 
+  - GET (a, pg) - Returns a 200 and a list of all products
+  
+
+## Notes
+
+Overall I really enjoyed this exercise, it was good to stretch my JavaScript muscles, having been using Python for the last 9 months.
+
+I added queriable data to JUST the GET /api/applications endpoint, as I wanted to show that I am able to do it, but didn't want to spend too much time repeating the same for the other GET endpoints.
+
+With more time I would use the 'express-rate-limit' package to limit all requests.
