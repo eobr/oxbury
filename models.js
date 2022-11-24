@@ -36,7 +36,6 @@ exports.selectApplications = async ({
   const dataCopy = { ...data };
   const applications = dataCopy.application;
   const filters = [];
-  console.log(farmer_id);
   if (id) filters.push((x) => x.id === Number(id));
   if (type) filters.push((x) => x.type === type);
   if (status) filters.push((x) => x.status === status);
@@ -91,7 +90,6 @@ exports.editFarmers = async (updatedFarmer, farmerId) => {
   const data = await this.selectData();
   const dataCopy = { ...data };
   const farmerIndex = dataCopy.farmer.findIndex((x) => x.id === farmerId);
-  console.log(farmerIndex, farmerId);
   if (farmerIndex === -1) return false;
 
   dataCopy.farmer.splice(farmerIndex, 1, updatedFarmer);

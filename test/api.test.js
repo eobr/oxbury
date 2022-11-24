@@ -189,7 +189,6 @@ describe("PATCH /api/farmers", () => {
     const addedFarmer = res.body;
     const farmers = await selectFarmers();
     const patchedFarmer = farmers.find((x) => x.id === farmerId);
-    console.log(patchedFarmer);
     expect(patchedFarmer).toEqual(reqBody);
   });
 

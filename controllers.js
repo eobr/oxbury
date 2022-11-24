@@ -132,7 +132,6 @@ exports.patchFarmers = async (req, res, next) => {
     }
     const { farmerId } = req.params;
     const data = await editFarmers(req.body, Number(farmerId));
-    console.log(data);
     if (data) res.status(200).send(data);
     else res.status(404).send(`Farmer ${farmerId} not found`);
   } catch (err) {
