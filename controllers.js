@@ -45,7 +45,11 @@ exports.getFarmers = async (req, res, next) => {
 
 exports.getApplications = async (req, res, next) => {
   try {
-    const data = await selectApplications();
+    const data = await selectApplications(req.query);
+    if (!data) {
+      res.status(404).send("404: No data found");
+      return;
+    }
     const paginatedData = paginate(req.query.page, req.query.limit, data);
     res.status(200).send({ data: paginatedData });
   } catch (err) {

@@ -24,9 +24,33 @@ exports.selectProducts = async () => {
   return data.product;
 };
 
-exports.selectApplications = async () => {
+exports.selectApplications = async ({
+  id = null,
+  type = null,
+  amount_requested = null,
+  status = null,
+  product_id = null,
+  farmer_id = null,
+}) => {
   const data = await this.selectData();
-  return data.application;
+  const dataCopy = { ...data };
+  const applications = dataCopy.application;
+  const filters = [];
+  console.log(farmer_id);
+  if (id) filters.push((x) => x.id === Number(id));
+  if (type) filters.push((x) => x.type === type);
+  if (status) filters.push((x) => x.status === status);
+  if (product_id) filters.push((x) => x.product_id == product_id);
+  if (farmer_id) filters.push((x) => x.farmer_id == Number(farmer_id));
+  if (amount_requested) {
+    filters.push((x) => x.amount_requested == amount_requested);
+  }
+  if (filters.length) {
+    const filteredData = filters.reduce((d, f) => d.filter(f), applications);
+    if (filteredData.length) return filteredData;
+    else return false;
+  }
+  return applications;
 };
 
 // POSTs

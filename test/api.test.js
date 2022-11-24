@@ -78,6 +78,30 @@ describe("GET /api/applications", () => {
       })
     );
   });
+  it("returns correct data with single query", async () => {
+    const farmer_id = 1215200;
+    const res = await request
+      .get(`/api/applications/?farmer_id=${farmer_id}`)
+      .expect(200);
+    expect(res.body.data.length).toBe(3);
+    expect(res.body.data.every((x) => x.farmer_id === farmer_id)).toBe(true);
+  });
+  it("returns correct data with multiple queries", async () => {
+    const farmer_id = 1215200;
+    const type = "flexi_credit";
+    const res = await request
+      .get(`/api/applications/?farmer_id=${farmer_id}&type=${type}`)
+      .expect(200);
+    expect(res.body.data.length).toBe(2);
+    expect(res.body.data.every((x) => x.farmer_id === farmer_id)).toBe(true);
+    expect(res.body.data.every((x) => x.type === type)).toBe(true);
+  });
+  it("returns 404 if no data was found with queries", async () => {
+    const farmer_id = 99999999;
+    const res = await request
+      .get(`/api/applications/?farmer_id=${farmer_id}`)
+      .expect(404);
+  });
 });
 describe("POST /api/farmers", () => {
   it("adds new farmer to data.json", async () => {
