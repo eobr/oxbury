@@ -9,6 +9,7 @@ const {
   removeFarmers,
   editFarmers,
 } = require("./models");
+const { paginate } = require("./utils");
 const { farmerSchema } = require("./validation/farmer.schema");
 
 // GETs
@@ -25,7 +26,8 @@ exports.getData = async (req, res, next) => {
 exports.getFarms = async (req, res, next) => {
   try {
     const data = await selectFarms();
-    res.status(200).send({ data });
+    const paginatedData = paginate(req.query.page, req.query.limit, data);
+    res.status(200).send({ data: paginatedData });
   } catch (err) {
     next(err);
   }
@@ -34,7 +36,8 @@ exports.getFarms = async (req, res, next) => {
 exports.getFarmers = async (req, res, next) => {
   try {
     const data = await selectFarmers();
-    res.status(200).send({ data });
+    const paginatedData = paginate(req.query.page, req.query.limit, data);
+    res.status(200).send({ data: paginatedData });
   } catch (err) {
     next(err);
   }
@@ -43,7 +46,8 @@ exports.getFarmers = async (req, res, next) => {
 exports.getApplications = async (req, res, next) => {
   try {
     const data = await selectApplications();
-    res.status(200).send({ data });
+    const paginatedData = paginate(req.query.page, req.query.limit, data);
+    res.status(200).send({ data: paginatedData });
   } catch (err) {
     next(err);
   }
@@ -52,7 +56,8 @@ exports.getApplications = async (req, res, next) => {
 exports.getProducts = async (req, res, next) => {
   try {
     const data = await selectProducts();
-    res.status(200).send({ data });
+    const paginatedData = paginate(req.query.page, req.query.limit, data);
+    res.status(200).send({ data: paginatedData });
   } catch (err) {
     next(err);
   }

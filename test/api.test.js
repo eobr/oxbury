@@ -110,7 +110,7 @@ describe("POST /api/farmers", () => {
 
 describe("DELETE /api/farmer/:id", () => {
   it("deletes a farmer from data.json", async () => {
-    const farmerId = 1945189;
+    const farmerId = 1252257;
     await request.delete(`/api/farmers/${farmerId}`).expect(200);
     const farmers = await selectFarmers();
     const indexOfDeletedFarmer = farmers.findIndex((x) => x.id === farmerId);
@@ -123,7 +123,7 @@ describe("DELETE /api/farmer/:id", () => {
 
 describe("PATCH /api/farmers", () => {
   it("adds new farmer to data.json", async () => {
-    const farmerId = 1921858;
+    const farmerId = 1880293;
     const reqBody = {
       id: farmerId,
       name: "test",
@@ -162,5 +162,35 @@ describe("PATCH /api/farmers", () => {
       farm_id: 99999,
     };
     await request.patch(`/api/farmers/${farmerId}`).send(reqBody).expect(404);
+  });
+});
+describe("Pagination tests", () => {
+  it("returns paginated data with default page num and limit", async () => {
+    const firstFarmer = {
+      id: 1945189,
+      name: "James Miller",
+      age: 54,
+      phone_number: "07700900345",
+      farm_id: 1535538,
+    };
+    const res = await request.get("/api/farmers").expect(200);
+    expect(res.body.data.length).toEqual(30);
+    expect(res.body.data[0]).toEqual(firstFarmer);
+  });
+  it("returns paginated data with queried page and limit", async () => {
+    const thirdFarmer = {
+      id: 1359197,
+      name: "Beatrice Labarge",
+      age: 56,
+      phone_number: "07700900413",
+      farm_id: 1266435,
+    };
+    const page = 3;
+    const limit = 1;
+    const res = await request
+      .get(`/api/farmers/?page=${page}&limit=${limit}`)
+      .expect(200);
+    expect(res.body.data.length).toEqual(1);
+    expect(res.body.data[0]).toEqual(thirdFarmer);
   });
 });
